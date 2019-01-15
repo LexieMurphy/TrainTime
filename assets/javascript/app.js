@@ -100,7 +100,7 @@ $(document).ready(function() {
         console.log(minutesAway);
 
         // Next Arrival Time Calc
-        var nextArrival = moment().add(frequencyMin, "minutes").format("hh:mm A");
+        var nextArrival = firstArrivalConverted.add(frequencyMin, "minutes").format("hh:mm A");
         console.log(nextArrival);
 
         // Creates TRs to the table
