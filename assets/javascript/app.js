@@ -61,9 +61,6 @@ $(document).ready(function() {
 
     });
 
-    //parse int the frequencyMin
-    var intFreq = parseInt(frequencyMin);
-
     database.ref().on("child_added", function (childSnapshot) {
         childSnapshot.val();
         console.log(childSnapshot.val());
@@ -79,14 +76,16 @@ $(document).ready(function() {
         minutesAway = childSnapshot.val().minutesAway;
         console.log(minutesAway);
 
-        var firstArrival = "00:00";
+        //parse int the frequencyMin
+        var intFreq = parseInt(frequencyMin);
 
         //Convert firstArrival Time
         var firstArrivalConverted = moment(firstArrival, "hh:mm A").subtract(1,"years");
         console.log(firstArrivalConverted);
 
+        //Current Time
         var currentTime = moment();
-        console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+        console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm A"));
 
         //difference between times
         var diffTime = moment().diff(moment(firstArrivalConverted),"minutes");
