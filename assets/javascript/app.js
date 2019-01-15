@@ -104,10 +104,6 @@ $(document).ready(function() {
         var nextArrival = moment().add(frequencyMin, "minutes").format("hh:mm A");
         console.log(nextArrival);
 
- 
-
-
-
         // Creates TRs to the table
         tableRow = $("<tr>");
 
