@@ -7,7 +7,6 @@ function displayTime() {
 
 $(document).ready(function() {
     displayTime();
-});
 
 
     // Initial Values
@@ -15,7 +14,7 @@ $(document).ready(function() {
     var destination = "";
     var frequencyMin = 0;
     var firstArrival = "";
-    var nextArrival = "";
+    //var nextArrival = "";
     var minutesAway = "";
 
 
@@ -33,73 +32,6 @@ $(document).ready(function() {
 
     // Convenience of setting firebase database
     var database = firebase.database();
-
-    //parse int the frequencyMin
-    var intFreq = parseInt(frequencyMin);
-
-    database.ref().on("child_added", function (childSnapshot) {
-        childSnapshot.val();
-        console.log(childSnapshot.val());
-        trainName = childSnapshot.val().trainName;
-        console.log(trainName);
-        destination = childSnapshot.val().destination;
-        console.log(destination);
-        frequencyMin = childSnapshot.val().frequencyMin;
-        //frequencyMin = parseInt(frequencyMin);
-        console.log(frequencyMin);
-        firstArrival = childSnapshot.val().firstArrival;
-        console.log(firstArrival);
-        minutesAway = childSnapshot.val().minutesAway;
-        console.log(minutesAway);
-
-        //Convert firstArrival Time
-        var firstArrivalConverted = parseInt(firstArrival);
-
-        //Remaining Time
-        var tRemainder = diffTime % intFreq;
-
-        //difference between times
-        var diffTime = moment().diff(moment(firstArrivalConverted),"minutes");
-
-        // Next Arrival Time Calc
-        var nextArrival = moment().add(frequencyMin, 'minutes').format('hh:mm A');
-        console.log(nextArrival);
-
-        // Minutes Away Calc
-        var minutesAway = intFreq - tRemainder;
-        console.log(minutesAway);
-
-        // Creates TRs to the table
-        tableRow = $("<tr>");
-
-        // Creates TDs to the TRs
-        trainNameTD = $("<td>");
-        destinationTD = $("<td>");
-        frequencyMinTD = $("<td>");
-        nextArrivalTD = $("<td>");
-        minutesAwayTD = $("<td>");
-
-        $("tbody").append(tableRow);
-
-        //This creates TDs to the tbody
-        tableRow.append(trainNameTD);
-        tableRow.append(destinationTD);
-        tableRow.append(frequencyMinTD);
-        tableRow.append(nextArrivalTD);
-        tableRow.append(minutesAway);
-
-        //This displays the data to the page
-        trainNameTD.append(trainName);
-        destinationTD.append(destination);
-        frequencyMinTD.append(frequencyMin);
-        nextArrivalTD.append(nextArrival);
-        minutesAwayTD.append(minutesAway);
-
-    }, function (errorObject) {
-        console.log("Errors handled: " + errorObject.code);
-    });
-
-
 
     $("#submit").on("click", function (event) {
         event.preventDefault();
@@ -128,3 +60,82 @@ $(document).ready(function() {
         });
 
     });
+
+    //parse int the frequencyMin
+    var intFreq = parseInt(frequencyMin);
+
+    database.ref().on("child_added", function (childSnapshot) {
+        childSnapshot.val();
+        console.log(childSnapshot.val());
+        trainName = childSnapshot.val().trainName;
+        console.log(trainName);
+        destination = childSnapshot.val().destination;
+        console.log(destination);
+        frequencyMin = childSnapshot.val().frequencyMin;
+        //frequencyMin = parseInt(frequencyMin);
+        console.log(frequencyMin);
+        firstArrival = childSnapshot.val().firstArrival;
+        console.log(firstArrival);
+        minutesAway = childSnapshot.val().minutesAway;
+        console.log(minutesAway);
+
+        var firstArrival = "00:00";
+
+        //Convert firstArrival Time
+        var firstArrivalConverted = moment(firstArrival, "hh:mm A").subtract(1,"years");
+        console.log(firstArrivalConverted);
+
+        var currentTime = moment();
+        console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+        //difference between times
+        var diffTime = moment().diff(moment(firstArrivalConverted),"minutes");
+        console.log(diffTime);
+
+        //Remaining Time
+        var tRemainder = diffTime % intFreq;
+        console.log(tRemainder);
+
+        // Minutes Away Calc
+        var minutesAway = intFreq - tRemainder;
+        console.log(minutesAway);
+
+        // Next Arrival Time Calc
+        var nextArrival = moment().add(frequencyMin, "minutes").format("hh:mm A");
+        console.log(nextArrival);
+
+ 
+
+
+
+        // Creates TRs to the table
+        tableRow = $("<tr>");
+
+        // Creates TDs to the TRs
+        trainNameTD = $("<td>");
+        destinationTD = $("<td>");
+        frequencyMinTD = $("<td>");
+        nextArrivalTD = $("<td>");
+        minutesAwayTD = $("<td>");
+
+        $("tbody").append(tableRow);
+
+        //This creates TDs to the tbody
+        tableRow.append(trainNameTD);
+        tableRow.append(destinationTD);
+        tableRow.append(frequencyMinTD);
+        tableRow.append(nextArrivalTD);
+        tableRow.append(minutesAwayTD);
+
+        //This displays the data to the page
+        trainNameTD.append(trainName);
+        destinationTD.append(destination);
+        frequencyMinTD.append(frequencyMin);
+        nextArrivalTD.append(nextArrival);
+        minutesAwayTD.append(minutesAway);
+
+    }, function (errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+
+});
